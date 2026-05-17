@@ -5,6 +5,12 @@
 <meta charset="utf-8">
 <title>이희형 ♡ 장지연 — 청첩장</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:type" content="website">
+<meta property="og:title" content="이희형 ♡ 장지연 — 청첩장">
+<meta property="og:description" content="2026년 7월 4일 토요일 오후 여섯시 · 빌라드파티앤">
+<meta property="og:image" content="https://hhjy-wedding.pages.dev/cover.png">
+<meta property="og:url" content="https://hhjy-wedding.pages.dev">
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Gowun+Dodum&family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
@@ -179,6 +185,7 @@ button { font-family: inherit; }
 .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--ink); font-family: 'Gowun Dodum', system-ui, sans-serif; font-size: 12px; letter-spacing: .08em; padding: 10px 16px; border-radius: 0; cursor: pointer; text-decoration: none; display: inline-block; }
 .btn-ghost { background: transparent; color: var(--soft); border: 1px solid var(--line-d); font-family: 'Gowun Dodum', system-ui, sans-serif; font-size: 12px; letter-spacing: .08em; padding: 10px 16px; border-radius: 0; cursor: pointer; }
 .btn-solid { background: var(--ink); color: var(--paper); border: 1px solid var(--ink); font-family: 'Gowun Dodum', system-ui, sans-serif; font-size: 12px; letter-spacing: .08em; padding: 10px 16px; border-radius: 0; cursor: pointer; }
+.btn-kakao { background: #FEE500; color: #191919; border: none; font-family: 'Gowun Dodum', system-ui, sans-serif; font-size: 13px; letter-spacing: .06em; padding: 13px 28px; border-radius: 6px; cursor: pointer; font-weight: 700; margin-top: 28px; }
 .btn-chip { background: transparent; color: var(--ink); border: 1px solid var(--ink); font-family: 'Gowun Dodum', system-ui, sans-serif; font-size: 11px; letter-spacing: .05em; padding: 6px 10px; border-radius: 0; cursor: pointer; }
 
 /* ── RSVP Modal ── */
@@ -395,6 +402,7 @@ button { font-family: inherit; }
     <div class="closing-title">Thank you <span style="vertical-align:-2px">♡</span></div>
     <div class="closing-names">이 희 형 · 장 지 연</div>
     <div class="closing-date">2026 . 07 . 04 · sat · 18:00</div>
+    <button class="btn-kakao" id="kakao-share-btn">카카오톡으로 공유하기</button>
   </section>
 
 </div><!-- /#root -->
@@ -561,6 +569,32 @@ document.getElementById('rsvp-open-btn').addEventListener('click', openModal);
   document.getElementById(id).addEventListener('click', closeModal);
 });
 modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+
+// ── Kakao Share ──
+Kakao.init('fab7efd2bb1655f6ad25289490b2fd12');
+document.getElementById('kakao-share-btn').addEventListener('click', function() {
+  Kakao.Share.sendDefault({
+    objectType: 'feed',
+    content: {
+      title: '이희형 ♡ 장지연 — 청첩장',
+      description: '2026년 7월 4일 토요일 오후 여섯시 · 빌라드파티앤',
+      imageUrl: 'https://hhjy-wedding.pages.dev/cover.png',
+      link: {
+        mobileWebUrl: 'https://hhjy-wedding.pages.dev',
+        webUrl: 'https://hhjy-wedding.pages.dev',
+      },
+    },
+    buttons: [
+      {
+        title: '청첩장 보기',
+        link: {
+          mobileWebUrl: 'https://hhjy-wedding.pages.dev',
+          webUrl: 'https://hhjy-wedding.pages.dev',
+        },
+      },
+    ],
+  });
+});
 
 document.getElementById('rsvp-submit').addEventListener('click', function() {
   var name = document.getElementById('rsvp-name').value.trim();
