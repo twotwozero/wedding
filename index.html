@@ -621,10 +621,6 @@ document.getElementById('rsvp-submit').addEventListener('click', function() {
   });
   var marker = new kakao.maps.Marker({ position: new kakao.maps.LatLng(LAT, LNG) });
   marker.setMap(map);
-  var infowindow = new kakao.maps.InfoWindow({
-    content: '<div style="padding:5px 8px;font-size:12px;font-family:\'Gowun Dodum\',sans-serif;white-space:nowrap;">빌라드파티앤</div>'
-  });
-  infowindow.open(map, marker);
 })();
 </script>
 </body>
