@@ -104,10 +104,13 @@ button { font-family: inherit; }
   width: 40px; height: 1px; background: var(--ink);
   opacity: .55; margin: 42px auto 30px;
 }
-.family-rows { max-width: 340px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
-.family-row { font-family: 'Gowun Dodum', system-ui, sans-serif; font-size: 14px; color: var(--ink); letter-spacing: .04em; }
+.family-rows { margin: 0 auto; display: table; }
+.family-row { display: table-row; font-family: 'Gowun Dodum', system-ui, sans-serif; font-size: 14px; color: var(--ink); letter-spacing: .04em; }
+.family-row > span { display: table-cell; white-space: nowrap; padding-bottom: 14px; vertical-align: middle; }
+.family-row:last-child > span { padding-bottom: 0; }
 .family-sep { color: var(--soft); margin: 0 6px; }
-.family-role { color: var(--soft); font-size: 12.5px; margin: 0 8px; }
+.family-role { color: var(--soft); font-size: 12.5px; padding: 0 8px 14px; text-align: center; }
+.family-row:last-child .family-role { padding-bottom: 0; }
 .family-name { font-family: 'Nanum Myeongjo', serif; font-size: 15px; font-weight: 700; letter-spacing: .18em; }
 
 /* ── WHEN ── */
@@ -132,8 +135,10 @@ button { font-family: inherit; }
 .location { padding: 56px 28px; text-align: center; background: var(--sand); }
 .venue-name { font-family: 'Nanum Myeongjo', serif; font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: .12em; }
 .venue-name-en { margin-top: 4px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: var(--soft); letter-spacing: .18em; }
-.map-wrap { margin-top: 22px; border: 1px solid var(--line-d); overflow: hidden; height: 360px; background: #fff; }
-.map-wrap iframe { border: 0; width: 100%; height: 100%; display: block; }
+.map-wrap { margin-top: 22px; border: 1px solid var(--line-d); overflow: hidden; height: 320px; }
+#map { width: 100%; height: 100%; }
+.leaflet-popup-content-wrapper { border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.12); font-family: 'Gowun Dodum', sans-serif; font-size: 13px; }
+.leaflet-popup-tip-container { display: none; }
 .venue-address { margin-top: 16px; font-family: 'Gowun Dodum', system-ui, sans-serif; font-size: 13px; color: var(--ink); line-height: 1.7; }
 .venue-address small { color: var(--soft); font-size: 12px; }
 .location-btns { margin-top: 22px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
@@ -193,6 +198,8 @@ button { font-family: inherit; }
 .modal-actions { display: flex; gap: 8px; margin-top: 26px; }
 .modal-actions .btn-ghost, .modal-actions .btn-solid { flex: 1; }
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body>
 <div id="root">
@@ -239,12 +246,12 @@ button { font-family: inherit; }
 
     <div class="family-rows">
       <div class="family-row">
-        <span>이경구</span><span class="family-sep">·</span><span>김점순</span>
+        <span><span>이경구</span><span class="family-sep">·</span><span>김점순</span></span>
         <span class="family-role">의 아들</span>
         <span class="family-name">희&nbsp;형</span>
       </div>
       <div class="family-row">
-        <span>장용철</span><span class="family-sep">·</span><span>강혜희</span>
+        <span><span>장용철</span><span class="family-sep">·</span><span>강혜희</span></span>
         <span class="family-role">의 딸</span>
         <span class="family-name">지&nbsp;연</span>
       </div>
@@ -282,11 +289,7 @@ button { font-family: inherit; }
     <div class="venue-name-en">Villa de Party &amp;</div>
 
     <div class="map-wrap">
-      <iframe
-        title="빌라드파티앤 지도"
-        src="https://map.kakao.com/?itemId=1824318257"
-        loading="lazy"
-        allowfullscreen></iframe>
+      <div id="map"></div>
     </div>
 
     <div class="venue-address">
@@ -575,6 +578,18 @@ document.getElementById('rsvp-submit').addEventListener('click', function() {
   document.getElementById('modal-form').style.display = 'none';
   document.getElementById('modal-thanks').style.display = 'block';
 });
+</script>
+<script>
+(function() {
+  var LAT = 36.40380961273456, LNG = 127.37555469881589;
+  var map = L.map('map', { zoomControl: false, scrollWheelZoom: false, dragging: false, attributionControl: false }).setView([LAT, LNG], 17);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+  var icon = L.divIcon({
+    html: '<div style="width:14px;height:14px;background:#1a1a1a;border-radius:50%;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.35)"></div>',
+    className: '', iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -12]
+  });
+  L.marker([LAT, LNG], { icon: icon }).addTo(map).bindPopup('<strong>빌라드파티앤</strong>').openPopup();
+})();
 </script>
 </body>
 </html>
