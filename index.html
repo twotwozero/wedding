@@ -144,8 +144,6 @@ button { font-family: inherit; }
 .venue-name-en { margin-top: 4px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: var(--soft); letter-spacing: .18em; }
 .map-wrap { margin-top: 22px; border: 1px solid var(--line-d); overflow: hidden; height: 320px; }
 #map { width: 100%; height: 100%; }
-.leaflet-popup-content-wrapper { border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.12); font-family: 'Gowun Dodum', sans-serif; font-size: 13px; }
-.leaflet-popup-tip-container { display: none; }
 .venue-address { margin-top: 16px; font-family: 'Gowun Dodum', system-ui, sans-serif; font-size: 13px; color: var(--ink); line-height: 1.7; }
 .venue-address small { color: var(--soft); font-size: 12px; }
 .location-btns { margin-top: 22px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
@@ -206,8 +204,7 @@ button { font-family: inherit; }
 .modal-actions { display: flex; gap: 8px; margin-top: 26px; }
 .modal-actions .btn-ghost, .modal-actions .btn-solid { flex: 1; }
 </style>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fab7efd2bb1655f6ad25289490b2fd12"></script>
 </head>
 <body>
 <div id="root">
@@ -617,13 +614,18 @@ document.getElementById('rsvp-submit').addEventListener('click', function() {
 <script>
 (function() {
   var LAT = 36.40380961273456, LNG = 127.37555469881589;
-  var map = L.map('map', { zoomControl: false, scrollWheelZoom: false, dragging: false, attributionControl: false }).setView([LAT, LNG], 17);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
-  var icon = L.divIcon({
-    html: '<div style="width:14px;height:14px;background:#1a1a1a;border-radius:50%;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.35)"></div>',
-    className: '', iconSize: [14, 14], iconAnchor: [7, 7], popupAnchor: [0, -12]
+  var container = document.getElementById('map');
+  var map = new kakao.maps.Map(container, {
+    center: new kakao.maps.LatLng(LAT, LNG),
+    level: 3
   });
-  L.marker([LAT, LNG], { icon: icon }).addTo(map).bindPopup('<strong>빌라드파티앤</strong>').openPopup();
+  map.setZoomable(false);
+  var marker = new kakao.maps.Marker({ position: new kakao.maps.LatLng(LAT, LNG) });
+  marker.setMap(map);
+  var infowindow = new kakao.maps.InfoWindow({
+    content: '<div style="padding:5px 8px;font-size:12px;font-family:\'Gowun Dodum\',sans-serif;white-space:nowrap;">빌라드파티앤</div>'
+  });
+  infowindow.open(map, marker);
 })();
 </script>
 </body>
